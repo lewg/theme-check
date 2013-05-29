@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="theme-check" default="test">
+
+
+	<!-- Check for required parameters -->
+	<fail unless="theme_name">Missing Theme Name (-Dtheme_name=[theme_folder_name])</fail>
+	<fail unless="wordpress_dir">Missing WordPress Directory (-wordpress_dir=[wordpress_directory])</fail>
+	<fail unless="theme_dir">Missing Themes Folder (-Dtheme_dir=[themes_folder])</fail>
+
+	<!-- Clean the workspace -->
+	<target name="clean">
+		<delete dir="results"/>
+	</target>
+
+	<!-- Prepare the workspace -->
+	<target name="prepare" depends="clean" description="Create results folders">
+		<mkdir dir="results/html"/>
+		<mkdir dir="results/xml" />
+	</target>
+
+
+	<target name="test" depends="prepare">
+		<exec executable="php" output="results/html/${theme_name}_report.html">
+			<arg value="cli.php" />
+			<arg value="--wordpress=${wordpress_dir}" />
+			<arg value="--folder=${theme_dir}" />
+			<arg value="${theme_name}" />
+		</exec>
+	</target>
+
+	<!-- Output a JUnix compatible XML file -->
+	<target name="junit" depends="test">
+		<exec executable="php" output="results/xml/${theme_name}_junit.xml">
+			<arg value="cli-junit-output.php" />
+			<arg value="--threshold=${threshold}" />
+			<arg value="results/html/${theme_name}_report.html" />
+		</exec>
+	</target>
+
+</project>
