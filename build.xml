@@ -32,7 +32,7 @@
 	<!-- Output a JUnix compatible XML file -->
 	<target name="junit" depends="test">
 		<exec executable="php" output="results/xml/${theme_name}_junit.xml">
-			<arg value="cli-junit-output.php" />
+			<arg value="cli/junit-output.php" />
 			<arg value="--threshold=${threshold}" />
 			<arg value="results/html/${theme_name}_report.html" />
 		</exec>
